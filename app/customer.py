@@ -35,22 +35,16 @@ class Customer:
                 self.shop = shop
                 self.cost = cost
 
-        print(f"{self.name}'s trip to the {shop.name} costs {cost:.2f}")
+        print(f"{self.name}\'s trip to the {shop.name} costs {cost:.2f}")
 
-    def calc_distance(self, shop: "Shop") -> int:
+    def calc_distance(self, shop: "Shop") -> float:
         return math.sqrt(
             (self.location[0] - shop.location[0]) ** 2
             + (self.location[1] - shop.location[1]) ** 2
         )
 
     def calc_groceries(self, shop: "Shop") -> float:
-        cost = 0
-
-        for product, quantity in self.products.items():
-            if product in shop.products:
-                cost += shop.products[product] * quantity
-
-        return cost
+        return shop.calc_groceries_cost(self)
 
     def ride_for_shopping(self) -> None:
         if not self.shop:
@@ -61,6 +55,7 @@ class Customer:
 
         else:
             print(f"{self.name} rides to {self.shop.name}\n")
+            self.location = self.shop.location
             self.shop.print_recipe(self)
             self.money -= self.cost
             print(f"{self.name} rides home")
